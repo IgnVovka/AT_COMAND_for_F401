@@ -11,7 +11,8 @@
 #include <stdint.h>
 
 #define flash_addr    0x08020000
-struct
+
+struct my_struct
 {
     int num0;
     int val0;
@@ -60,16 +61,17 @@ struct
     int val11;
 
     //uint16_t siz12;
-} test_struct;//структура для записи данных  в ячейку  памяти
+};//структура для записи данных  в ячейку  памяти
 
-const uint32_t byte[12];
-volatile uint8_t flag;//флаг для чтения;
-char readBuf[40];//буфер, где будут помещаться принятые байты
-char writeBuf[120];//буфер для записи в терминал
-uint8_t rxbyte;//переменная для приёма по одному байту
-uint8_t i;//инкремент для readBuf
-const char str_array[14][20];
-int s;//РАЗМЕР ДВУМЕРНОГО МАССИВА
+
+extern const uint32_t byte[12];
+extern volatile uint8_t flag;//флаг для чтения;
+extern char readBuf[40];//буфер, где будут помещаться принятые байты
+extern char writeBuf[120];//буфер для записи в терминал
+extern uint8_t rxbyte;//переменная для приёма по одному байту
+extern uint8_t i;//инкремент для readBuf
+extern const char str_array[14][20];//словарь
+extern int s;//РАЗМЕР ДВУМЕРНОГО МАССИВА
 
 int check (void);
 

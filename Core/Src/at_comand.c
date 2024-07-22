@@ -10,11 +10,12 @@
 #include <string.h>
 #include <ctype.h>
 
+extern struct my_struct par;
 const uint32_t byte[12]={10,11,12,13,14,15,16,17,18,19,20,21};
 volatile uint8_t flag=0;//флаг для чтения;
-//char readBuf[40];//буфер, где будут помещаться принятые байты
-//char writeBuf[120];//буфер для записи в терминал
-//uint8_t rxbyte;//переменная для приёма по одному байту
+char readBuf[40];//буфер, где будут помещаться принятые байты
+char writeBuf[120];//буфер для записи в терминал
+uint8_t rxbyte;//переменная для приёма по одному байту
 uint8_t i=0;//инкремент для readBuf
 const char str_array[14][20]={
 		"SPD",
@@ -52,12 +53,12 @@ void SPD()
     if (readBuf[6]=='=')//=
     {
         if (readBuf[7]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n", "SPD:", test_struct.val0); //выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n", "SPD:", par.val0); //выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[7]))
             {
-                sscanf(&readBuf[7],"%d",&test_struct.val0);//присвоить новое значение
+                sscanf(&readBuf[7],"%d",&par.val0);//присвоить новое значение
                 //test_struct.var3=sizeof(test_struct.var2[0]);
                 //writeFlash(flash_addr);
                 sprintf(writeBuf, "%s\r\n","Ok");
@@ -76,12 +77,12 @@ void LNOPEN()
     if (readBuf[9]=='=') //=
     {
         if (readBuf[10]=='?') //=?
-            sprintf(writeBuf, "%s %d\r\n","LNOPEN:",test_struct.val1);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","LNOPEN:",par.val1);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[10]))
             {
-                sscanf(&readBuf[10],"%d",&test_struct.val1);//присвоить новое значение
+                sscanf(&readBuf[10],"%d",&par.val1);//присвоить новое значение
                 //test_struct.var3=sizeof(test_struct.var2[1]);
                 //writeFlash(flash_addr+test_struct.var3);
                 sprintf(writeBuf, "%s\r\n", "Ok");
@@ -100,12 +101,12 @@ void LNHLOPEN()
     if (readBuf[11]=='=')//=
     {
         if (readBuf[12]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n","LNHLOPEN:",test_struct.val2);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","LNHLOPEN:",par.val2);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[12]))
             {
-                sscanf(&readBuf[12],"%d",&test_struct.val2); //присвоить новое значение
+                sscanf(&readBuf[12],"%d",&par.val2); //присвоить новое значение
                 //test_struct.var3=sizeof(test_struct.var2[2]);
                 sprintf(writeBuf, "%s\r\n", "Ok");
             }
@@ -123,12 +124,12 @@ void CURERRLOCK1()
     if (readBuf[14]=='=')//=
     {
         if (readBuf[15]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n","CURERRLOCK1:",test_struct.val3);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","CURERRLOCK1:",par.val3);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[15]))
             {
-                sscanf(&readBuf[15],"%d",&test_struct.val3);//присвоить новое значение
+                sscanf(&readBuf[15],"%d",&par.val3);//присвоить новое значение
                 //test_struct.var3=sizeof(test_struct.var2[3]);
                 sprintf(writeBuf, "%s\r\n", "Ok");
             }
@@ -146,12 +147,12 @@ void CURERRLOCK2()
     if (readBuf[14]=='=')//=
     {
         if (readBuf[15]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n","CURERRLOCK2:",test_struct.val4);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","CURERRLOCK2:",par.val4);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[15]))
             {
-                sscanf(&readBuf[15],"%d",&test_struct.val4);//присвоить новое значение
+                sscanf(&readBuf[15],"%d",&par.val4);//присвоить новое значение
                 //test_struct.var3=sizeof(test_struct.var2[4]);
                 sprintf(writeBuf, "%s\r\n", "Ok");
             }
@@ -169,12 +170,12 @@ void CURERRDRIVE1()
     if (readBuf[15]=='=')//=
     {
         if (readBuf[16]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n","CURERRDRIVE1:",test_struct.val5);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","CURERRDRIVE1:",par.val5);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[16]))
             {
-                sscanf(&readBuf[16],"%d",&test_struct.val5);//присвоить новое значение
+                sscanf(&readBuf[16],"%d",&par.val5);//присвоить новое значение
                 sprintf(writeBuf, "%s\r\n", "Ok");
             }
             else
@@ -191,12 +192,12 @@ void CURERRDRIVE2()
     if (readBuf[15]=='=')//=
     {
         if (readBuf[16]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n","CURERRDRIVE2:",test_struct.val6);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","CURERRDRIVE2:",par.val6);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[16]))
             {
-                sscanf(&readBuf[16],"%d",&test_struct.val6);//присвоить новое значение
+                sscanf(&readBuf[16],"%d",&par.val6);//присвоить новое значение
                 sprintf(writeBuf, "%s\r\n", "Ok");
             }
             else
@@ -213,12 +214,12 @@ void CURERRDRIVE3()
     if (readBuf[15]=='=')//=
     {
         if (readBuf[16]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n","CURERRDRIVE3:",test_struct.val7);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","CURERRDRIVE3:",par.val7);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[16]))
             {
-                sscanf(&readBuf[16],"%d",&test_struct.val7);//присвоить новое значение
+                sscanf(&readBuf[16],"%d",&par.val7);//присвоить новое значение
                 sprintf(writeBuf, "%s\r\n", "Ok");
             }
             else
@@ -235,12 +236,12 @@ void CURERRDRIVE4()
     if (readBuf[15]=='=')//=
     {
         if (readBuf[16]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n","CURERRDRIVE4:",test_struct.val8);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","CURERRDRIVE4:",par.val8);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[16]))
             {
-                sscanf(&readBuf[16],"%d",&test_struct.val8);//присвоить новое значение
+                sscanf(&readBuf[16],"%d",&par.val8);//присвоить новое значение
                 sprintf(writeBuf, "%s\r\n", "Ok");
             }
             else
@@ -257,12 +258,12 @@ void CURERRTIME()
     if (readBuf[13]=='=')//=
     {
         if (readBuf[14]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n","CURERRTIME:",test_struct.val9);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","CURERRTIME:",par.val9);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[14]))
             {
-                sscanf(&readBuf[14],"%d",&test_struct.val9);//присвоить новое значение
+                sscanf(&readBuf[14],"%d",&par.val9);//присвоить новое значение
                 sprintf(writeBuf, "%s\r\n", "Ok");
             }
             else
@@ -279,12 +280,12 @@ void STOTIMELOCK()
     if (readBuf[14]=='=')//=
     {
         if (readBuf[15]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n","STOTIMELOCK:",test_struct.val10);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","STOTIMELOCK:",par.val10);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[15]))
             {
-                sscanf(&readBuf[15],"%d",&test_struct.val10);//присвоить новое значение
+                sscanf(&readBuf[15],"%d",&par.val10);//присвоить новое значение
                 sprintf(writeBuf, "%s\r\n", "Ok");
             }
             else
@@ -301,12 +302,12 @@ void STOTIMEDRIVE()
     if (readBuf[15]=='=')//=
     {
         if (readBuf[16]=='?')//=?
-            sprintf(writeBuf, "%s %d\r\n","STOTIMEDRIVE:",test_struct.val11);//выдать текущее значение параметра
+            sprintf(writeBuf, "%s %d\r\n","STOTIMEDRIVE:",par.val11);//выдать текущее значение параметра
         else
         {
             if(isdigit(readBuf[16]))
             {
-                sscanf(&readBuf[16],"%d",&test_struct.val11);//присвоить новое значение
+                sscanf(&readBuf[16],"%d",&par.val11);//присвоить новое значение
                 sprintf(writeBuf, "%s\r\n", "Ok");
             }
             else
@@ -335,18 +336,18 @@ void READFLASH()
         if(first_byte==0xFFFFFFFF)
         {
             //sprintf(writeBuf, "%s\r\n", "First_byte==0xFF!");
-            test_struct.val0=byte[0];
-            test_struct.val1=byte[1];
-            test_struct.val2=byte[2];
-            test_struct.val3=byte[3];
-            test_struct.val4=byte[4];
-            test_struct.val5=byte[5];
-            test_struct.val6=byte[6];
-            test_struct.val7=byte[7];
-            test_struct.val8=byte[8];
-            test_struct.val9=byte[9];
-            test_struct.val10=byte[10];
-            test_struct.val11=byte[11];
+            par.val0=byte[0];
+            par.val1=byte[1];
+            par.val2=byte[2];
+            par.val3=byte[3];
+            par.val4=byte[4];
+            par.val5=byte[5];
+            par.val6=byte[6];
+            par.val7=byte[7];
+            par.val8=byte[8];
+            par.val9=byte[9];
+            par.val10=byte[10];
+            par.val11=byte[11];
             sprintf(writeBuf, "First byte=%X\r\n", (int)first_byte);
         }
         else
@@ -358,7 +359,7 @@ void READFLASH()
 uint8_t writeFlash (uint32_t addr)
 {
 	HAL_StatusTypeDef status;
-	uint32_t structureSize = sizeof(test_struct);          // замеряем размер структуры
+	uint32_t structureSize = sizeof(par);          // замеряем размер структуры
 	FLASH_EraseInitTypeDef FlashErase;                     // переменная для структуры, которая выполняет функцию стирания страницы
 	uint32_t pageError = 0;                                // переменная для записи информации об ошибках в процессе стирания
 
@@ -374,7 +375,7 @@ uint8_t writeFlash (uint32_t addr)
 		return HAL_ERROR;
 	}
 
-    uint32_t *dataPtr = (uint32_t *)&test_struct;          // создаем указатель на нашу структуру и записываем ее кусочками по 32 бита
+    uint32_t *dataPtr = (uint32_t *)&par;          // создаем указатель на нашу структуру и записываем ее кусочками по 32 бита
 	for (int i = 0; i < structureSize / 4; i++)            // 4 байта = 32 бита
     //for (int i = 0; i < structureSize; i++)
     {
