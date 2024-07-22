@@ -44,7 +44,7 @@
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-
+struct my_struct par;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -92,18 +92,18 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_UART_Receive_IT(&huart1, &rxbyte, 1);//вызов приёма, подготовка к приёму
-  test_struct.num0=1;
-  test_struct.num1=2;
-  test_struct.num2=3;
-  test_struct.num3=4;
-  test_struct.num4=5;
-  test_struct.num5=6;
-  test_struct.num6=7;
-  test_struct.num7=8;
-  test_struct.num8=9;
-  test_struct.num9=10;
-  test_struct.num10=11;
-  test_struct.num11=12;
+  par.num0=1;
+  par.num1=2;
+  par.num2=3;
+  par.num3=4;
+  par.num4=5;
+  par.num5=6;
+  par.num6=7;
+  par.num7=8;
+  par.num8=9;
+  par.num9=10;
+  par.num10=11;
+  par.num11=12;
   /* USER CODE END 2 */
 
   /* Infinite loop */
