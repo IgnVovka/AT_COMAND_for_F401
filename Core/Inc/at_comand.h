@@ -8,72 +8,72 @@
 #ifndef INC_AT_COMAND_H_//директива
 #define INC_AT_COMAND_H_
 
+
 #include <stdint.h>
 
 #define flash_addr    0x08020000
 
-struct my_struct
-{
-    int num0;
-    int val0;
-    //uint16_t siz1;
-    int num1;
-    int val1;
+struct my_struct {
+	int num0;
+	int val0;
+	//uint16_t siz1;
+	int num1;
+	int val1;
 
-    //uint16_t siz2;
-    int num2;
-    int val2;
+	//uint16_t siz2;
+	int num2;
+	int val2;
 
-    //uint16_t siz3;
-    int num3;
-    int val3;
+	//uint16_t siz3;
+	int num3;
+	int val3;
 
-    //uint16_t siz4;
-    int num4;
-    int val4;
+	//uint16_t siz4;
+	int num4;
+	int val4;
 
-    //uint16_t siz5;
-    int num5;
-    int val5;
+	//uint16_t siz5;
+	int num5;
+	int val5;
 
-    //uint16_t siz6;
-    int num6;
-    int val6;
+	//uint16_t siz6;
+	int num6;
+	int val6;
 
-    //uint16_t siz7;
-    int num7;
-    int val7;
+	//uint16_t siz7;
+	int num7;
+	int val7;
 
-    //uint16_t siz8;
-    int num8;
-    int val8;
+	//uint16_t siz8;
+	int num8;
+	int val8;
 
-    //uint16_t siz9;
-    int num9;
-    int val9;
+	//uint16_t siz9;
+	int num9;
+	int val9;
 
-    //uint16_t siz10;
-    int num10;
-    int val10;
+	//uint16_t siz10;
+	int num10;
+	int val10;
 
-    //uint16_t siz11;
-    int num11;
-    int val11;
+	//uint16_t siz11;
+	int num11;
+	int val11;
 
-    //uint16_t siz12;
-};//структура для записи данных  в ячейку  памяти
-
+//uint16_t siz12;
+};
+//структура для записи данных  в ячейку  памяти
 
 extern const uint32_t byte[12];
-extern volatile uint8_t flag;//флаг для чтения;
-extern char readBuf[40];//буфер, где будут помещаться принятые байты
-extern char writeBuf[120];//буфер для записи в терминал
-extern uint8_t rxbyte;//переменная для приёма по одному байту
-extern uint8_t i;//инкремент для readBuf
-extern const char str_array[14][20];//словарь
-extern int s;//РАЗМЕР ДВУМЕРНОГО МАССИВА
+extern volatile uint8_t flag; //флаг для чтения;
+extern char readBuf[40]; //буфер, где будут помещаться принятые байты
+extern char writeBuf[120]; //буфер для записи в терминал
+extern uint8_t rxbyte; //переменная для приёма по одному байту
+extern uint8_t i; //инкремент для readBuf
+extern const char str_array[14][20]; //словарь
+extern int s; //РАЗМЕР ДВУМЕРНОГО МАССИВА
 
-int check (void);
+int check(void);
 
 void SPD(void);
 void LNOPEN(void);
@@ -90,8 +90,8 @@ void STOTIMEDRIVE(void);
 void SAVEFLASH(void);
 void READFLASH(void);
 
-uint8_t writeFlash (uint32_t);
-uint32_t readFlash (uint32_t);
+uint8_t writeFlash(uint32_t);
+uint32_t readFlash(uint32_t);
 
 #endif /* INC_AT_COMAND_H_ */
 

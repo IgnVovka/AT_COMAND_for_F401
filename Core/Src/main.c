@@ -91,8 +91,9 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_UART_Receive_IT(&huart1, &rxbyte, 1);//вызов приёма, подготовка к приёму
-  par.num0=1;
+  HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(USART1_IRQn);
+  par.num0=1;//№ параметра
   par.num1=2;
   par.num2=3;
   par.num3=4;
@@ -108,81 +109,78 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  HAL_UART_Receive_IT(&huart1, &rxbyte, 1);//вызов приёма, подготовка к приёму
   while (1)
   {
     /* USER CODE END WHILE */
 	  if (flag==1)
-	         {
-	             switch (check())
-	             {
-	                 case 0:
-	                         //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                         SPD();//скорость соединения
-	                         break;
-	                 case 1:
-	                         //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                         LNOPEN();//расстояние полного открытия
-	                         break;
-	                 case 2:
-	                         //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                         LNHLOPEN();//расстояние неполного открытия
-	                         break;
-	                 case 3:
-	                         //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                         CURERRLOCK1();//аварийное значение токо линии замков 1
-	                         break;
-	                 case 4:
-	                         //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                         CURERRLOCK2();//аварийное значение токо линии замков 2
-	                         break;
-	                 case 5:
-	                         //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                         CURERRDRIVE1();//аварийное значение  тока линии цепей привода окна 1
-	                         break;
-	                 case 6:
-	                         //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                         CURERRDRIVE2();//аварийное значение  тока линии цепей привода окна 2
-	                         break;
-	                 case 7:
-	                         //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                         CURERRDRIVE3();//аварийное значение  тока линии цепей привода окна 3
-	                         break;
-	                 case 8:
-	                          //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                          CURERRDRIVE4();//аварийное значение  тока линии цепей привода окна 4
-	                          break;
-	                 case 9:
-	                          //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                          CURERRTIME();//время удержания аварийного значения  тока линии цепей
-	                          break;
-	                 case 10:
-	                          //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                          STOTIMELOCK();//время нахождения в упоре замков
-	                          break;
-	                 case 11:
-	                          //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                          STOTIMEDRIVE();//время нахождения в упоре цепей
-	                          break;
-	                 case 12:
-	                          SAVEFLASH();//сохранить всё во flash
-	                          //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                          break;
-	                 case 13:
-	                          READFLASH();//"холодный старт"
-	                          //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
-	                          break;
-	                 default:
-	                          sprintf(writeBuf, "%s", "Error\r\n");//передаём в массив writeBuf
-	                 break;
-
-	             }
-	             /*HAL_UART_Transmit_IT(&huart1, (uint8_t*)writeBuf, strlen(writeBuf));
-	             while (HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX ||
-	              HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX_RX);*/
-	             flag=0;//сбрасываем флаг
+	  {
+		  switch (check())
+	      {
+	      	  case 0:
+	      		  //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	      		  SPD();//скорость соединения
+	      		  break;
+	          case 1:
+	               //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	               LNOPEN();//расстояние полного открытия
+	               break;
+	          case 2:
+	               //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	               LNHLOPEN();//расстояние неполного открытия
+	               break;
+	          case 3:
+	               //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	               CURERRLOCK1();//аварийное значение токо линии замков 1
+	               break;
+	          case 4:
+	               //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	               CURERRLOCK2();//аварийное значение токо линии замков 2
+	               break;
+	          case 5:
+	               //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	               CURERRDRIVE1();//аварийное значение  тока линии цепей привода окна 1
+	               break;
+	          case 6:
+	               //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	               CURERRDRIVE2();//аварийное значение  тока линии цепей привода окна 2
+	               break;
+	          case 7:
+	               //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	               CURERRDRIVE3();//аварийное значение  тока линии цепей привода окна 3
+	               break;
+	          case 8:
+	               //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	               CURERRDRIVE4();//аварийное значение  тока линии цепей привода окна 4
+	               break;
+	          case 9:
+	               //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	               CURERRTIME();//время удержания аварийного значения  тока линии цепей
+	               break;
+	          case 10:
+	               //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	               STOTIMELOCK();//время нахождения в упоре замков
+	               break;
+	          case 11:
+	        	  //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	              STOTIMEDRIVE();//время нахождения в упоре цепей
+	              break;
+	          case 12:
+	        	  //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	              SAVEFLASH();//сохранить всё во flash
+	              break;
+	          case 13:
+	        	  //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
+	              READFLASH();//"холодный старт"
+	              break;
+	          default:
+	              sprintf(writeBuf, "%s", "Error\r\n");//передаём в массив writeBuf
+	              break;
+	      }
+	           	 flag=0;//сбрасываем флаг
 	             HAL_UART_Transmit(&huart1, (uint8_t*)writeBuf, strlen(writeBuf), HAL_MAX_DELAY);
 	             HAL_UART_Receive_IT(&huart1, &rxbyte, 1);//вызов приёма, подготовка к приёму
-	         }
+	  }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
