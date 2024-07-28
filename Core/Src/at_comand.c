@@ -10,17 +10,17 @@
 #include <string.h>
 #include <ctype.h>
 
-extern struct my_struct par;
+
 const uint32_t byte[12] = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 };
 volatile uint8_t flag = 0; //флаг для чтения;
-char readBuf[40]; //буфер, где будут помещаться принятые байты
-char writeBuf[120]; //буфер для записи в терминал
+char readBuf[50]; //буфер, где будут помещаться принятые байты
+char writeBuf[150]; //буфер для записи в терминал
 uint8_t rxbyte; //переменная для приёма по одному байту
 uint8_t i = 0; //инкремент для readBuf
-const char str_array[14][20] = { "SPD", "LNOPEN", "LNHLOPEN", "CURERRLOCK1",
-"CURERRLOCK2", "CURERRDRIVE1", "CURERRDRIVE2", "CURERRDRIVE3",
-"CURERRDRIVE4", "CURERRTIME", "STOTIMELOCK", "STOTIMEDRIVE",
-"SAVEFLASH", "READFLASH" }; //словарь
+const char str_array[14][20] = {"SPD", "LNOPEN", "LNHLOPEN","CURERRDRIVE1", "CURERRDRIVE2", "CURERRDRIVE3",
+"CURERRDRIVE4",  "CURERRLOCK1","CURERRLOCK2","CURERRTIME", "STOTIMELOCK", "STOTIMEDRIVE","SAVEFLASH", "READFLASH" }; //словарь
+type adr_func[14] = {&SPD, &LNOPEN, &LNHLOPEN,&CURERRDRIVE1,&CURERRDRIVE2,&CURERRDRIVE3,
+&CURERRDRIVE4,&CURERRLOCK1,&CURERRLOCK2,&CURERRTIME,&STOTIMELOCK,&STOTIMEDRIVE,&SAVEFLASH,&READFLASH};//адреса функций
 int s = sizeof(str_array) / sizeof(str_array[14]); //РАЗМЕР ДВУМЕРНОГО МАССИВА
 int check(void)
 {
@@ -28,7 +28,7 @@ int check(void)
 		return (-1);
 	for (int j = 0; j < s; j++)
 	{
-		if ((strstr(readBuf, str_array[j])) != NULL)
+		if ((strstr(readBuf, str_array[j])) != NULL)//функция сравнения strstr()
 			return (j);
 	}
 	return (-1);
@@ -152,25 +152,25 @@ void CURERRLOCK2()
 }
 void CURERRDRIVE1()
 {
-	if (readBuf[15] == '?' && readBuf[16] == '\r')     //Выдать описание команды
-		sprintf(writeBuf, "%s\r\n","Emergency current value of the window 1 drive circuit line");
-	else
-		sprintf(writeBuf, "%s\r\n", "Error");
-	if (readBuf[15] == '=')//=
-	{
-		if (readBuf[16] == '?')//=?
-			sprintf(writeBuf, "%s %d\r\n", "CURERRDRIVE1:", par.val5); //выдать текущее значение параметра
+	if (readBuf[15] == '?' && readBuf[16] == '\r')//Выдать описание команды
+			sprintf(writeBuf, "%s\r\n", "Emergency current value of the window 1 drive circuit line");
 		else
+			sprintf(writeBuf, "%s\r\n", "Error");
+		if (readBuf[15] == '=')//=
 		{
-			if (isdigit(readBuf[16]))
-			{
-				sscanf(&readBuf[16], "%d", &par.val5); //присвоить новое значение
-				sprintf(writeBuf, "%s\r\n", "Ok");
-			}
+			if (readBuf[16] == '?')//=?
+				sprintf(writeBuf, "%s %d\r\n", "CURERRDRIVE1:", par.val5);//выдать текущее значение параметра
 			else
-				sprintf(writeBuf, "%s\r\n", "Error");
+			{
+				if (isdigit(readBuf[16]))
+				{
+					sscanf(&readBuf[16], "%d", &par.val5); //присвоить новое значение
+					sprintf(writeBuf, "%s\r\n", "Ok");
+				}
+				else
+					sprintf(writeBuf, "%s\r\n", "Error");
+			}
 		}
-	}
 }
 void CURERRDRIVE2()
 {
@@ -321,8 +321,8 @@ void READFLASH()
 	{
 		uint32_t first_byte = readFlash(flash_addr);
 		//sprintf(writeBuf, "%X\r\n", first_byte);
-		if (first_byte == 0xFFFFFFFF)
-		//if (first_byte == 1)
+		//if (first_byte == 0xFFFFFFFF)
+		if (first_byte == 1)
 		{
 			//sprintf(writeBuf, "%s\r\n", "First_byte==0xFF!");
 			par.val0 = byte[0];
@@ -345,45 +345,5 @@ void READFLASH()
 	else
 		sprintf(writeBuf, "%s\r\n", "Error!");
 }
-uint8_t writeFlash(uint32_t addr)
-{
-	HAL_StatusTypeDef status;
-	uint32_t structureSize = sizeof(par);// замеряем размер структуры
-	FLASH_EraseInitTypeDef FlashErase; // переменная для структуры, которая выполняет функцию стирания страницы
-	uint32_t pageError = 0; // переменная для записи информации об ошибках в процессе стирания
 
-	//__disable_irq();// запрещаем прерывания
-	HAL_FLASH_Unlock();//разблокировка FLASH
-	FlashErase.TypeErase = FLASH_TYPEERASE_SECTORS;
-	FlashErase.NbSectors = 1;
-	FlashErase.Sector = FLASH_SECTOR_5;
-	FlashErase.VoltageRange = VOLTAGE_RANGE_3;
-	if (HAL_FLASHEx_Erase(&FlashErase, &pageError) != HAL_OK)// вызов функции стирания
-	{
-		HAL_FLASH_Lock(); // если не смог стереть, то закрыть память и вернуть ошибку
-		return HAL_ERROR;
-	}
-	uint32_t *dataPtr = (uint32_t*) &par; // создаем указатель на нашу структуру и записываем ее кусочками по 32 бита
-	for (int i = 0; i < structureSize / 4; i++)// 4 байта = 32 бита
-	{
-		status += HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, addr, dataPtr[i]);
-		addr += 4;// сдвигаем адрес на 4 байта
-		//status += HAL_FLASH_Program(FLASH_TYPEPROGRAM_BYTE, addr, dataPtr[i]);//не работает
-		//addr ++;// побайтово
-	}
-	//__enable_irq();// включаем прерывания обратно
-	HAL_FLASH_Lock();
-	return status;
-}
-uint32_t readFlash(uint32_t addr)
-{
-	/*uint32_t structureSize = sizeof(test_struct);
-	 uint32_t *dataPtr = (uint32_t *)&test_struct;
-	 for (int i = 0; i < structureSize / 4; i++)
-	 {
-	 dataPtr[i] = *(__IO uint32_t*)addr;
-	 addr += 4;
-	 }*/
-	return (*(__IO uint32_t*) addr);
-}
 

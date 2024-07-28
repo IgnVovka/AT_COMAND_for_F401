@@ -13,5 +13,3 @@
 ../Core/Src/at_comand.c:285:6:STOTIMEDRIVE	6
 ../Core/Src/at_comand.c:307:6:SAVEFLASH	3
 ../Core/Src/at_comand.c:318:6:READFLASH	4
-../Core/Src/at_comand.c:348:9:writeFlash	3
-../Core/Src/at_comand.c:378:10:readFlash	1

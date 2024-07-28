@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "at_comand.h"
+#include "at_flash.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,6 +46,9 @@ UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 struct my_struct par;
+type (*pointer)(void);
+//void (*pointer)(void);
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -115,7 +119,9 @@ int main(void)
     /* USER CODE END WHILE */
 	  if (flag==1)
 	  {
-		  switch (check())
+		  pointer=adr_func[check()];//pointer указатель на функцию, adr_func массив адресов функций
+		  pointer();
+		  /*switch (check())
 	      {
 	      	  case 0:
 	      		  //sprintf(writeBuf, "%s", readBuf);//передаём в массив writeBuf
@@ -176,7 +182,7 @@ int main(void)
 	          default:
 	              sprintf(writeBuf, "%s", "Error\r\n");//передаём в массив writeBuf
 	              break;
-	      }
+	      }*/
 	           	 flag=0;//сбрасываем флаг
 	             HAL_UART_Transmit(&huart1, (uint8_t*)writeBuf, strlen(writeBuf), HAL_MAX_DELAY);
 	             HAL_UART_Receive_IT(&huart1, &rxbyte, 1);//вызов приёма, подготовка к приёму

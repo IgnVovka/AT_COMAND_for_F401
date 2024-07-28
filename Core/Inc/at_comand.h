@@ -62,12 +62,15 @@ struct my_struct {
 
 //uint16_t siz12;
 };
-//структура для записи данных  в ячейку  памяти
+typedef void (*type)(void);
 
+extern type adr_func[14];
+extern type (*pointer)(void);
+extern struct my_struct par;//структура для записи данных  в ячейку  памяти
 extern const uint32_t byte[12];
 extern volatile uint8_t flag; //флаг для чтения;
-extern char readBuf[40]; //буфер, где будут помещаться принятые байты
-extern char writeBuf[120]; //буфер для записи в терминал
+extern char readBuf[50]; //буфер, где будут помещаться принятые байты
+extern char writeBuf[150]; //буфер для записи в терминал
 extern uint8_t rxbyte; //переменная для приёма по одному байту
 extern uint8_t i; //инкремент для readBuf
 extern const char str_array[14][20]; //словарь
@@ -89,6 +92,7 @@ void STOTIMELOCK(void);
 void STOTIMEDRIVE(void);
 void SAVEFLASH(void);
 void READFLASH(void);
+
 
 uint8_t writeFlash(uint32_t);
 uint32_t readFlash(uint32_t);
